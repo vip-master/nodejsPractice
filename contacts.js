@@ -1,14 +1,14 @@
-const fs = require('fs');
+const fs = require('fs').promises;
 // const { dirname } = require("path")
 
 const contactsPath = __dirname + '/db/contacts.json';
 
-function deserialize(path) {
-  return JSON.parse(fs.readFileSync(path));
+async function deserialize(path) {
+  return JSON.parse(await fs.readFile(path));
 }
 
 function serialize(path, data) {
-  fs.writeFileSync(path, JSON.stringify(data));
+  fs.writeFile(path, JSON.stringify(data));
 }
 
 function randomId(usedId) {
@@ -23,16 +23,16 @@ function randomId(usedId) {
   return random;
 }
 
-function listContacts() {
-  return deserialize(contactsPath);
+async function listContacts() {
+  return await deserialize(contactsPath);
 }
 
-function getContactById(contactId) {
-  return deserialize(contactsPath).find(e => e.id === contactId);
+async function getContactById(contactId) {
+  return (await deserialize(contactsPath)).find(e => e.id === contactId);
 }
 
-function removeContact(contactId) {
-  const data = deserialize(contactsPath);
+async function removeContact(contactId) {
+  const data = await deserialize(contactsPath);
 
   serialize(
     contactsPath,
@@ -40,8 +40,8 @@ function removeContact(contactId) {
   );
 }
 
-function addContact(name, email, phone) {
-  const data = deserialize(contactsPath);
+async function addContact(name, email, phone) {
+  const data = await deserialize(contactsPath);
 
   const id = randomId(data.map(e => e.id));
 

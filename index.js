@@ -12,19 +12,19 @@ program.parse(process.argv);
 
 const argv = program.opts();
 
-function invokeAction({ action, id, name, email, phone }) {
+async function invokeAction({ action, id, name, email, phone }) {
   id = Number.parseInt(id);
   switch (action) {
     case 'list':
-      console.table(listContacts());
+      console.table(await listContacts());
       break;
 
     case 'get':
-      console.table(getContactById(id));
+      console.table(await getContactById(id));
       break;
 
     case 'add':
-      console.log(addContact(name, email, phone) === -1 ? 'error: full id pull' : 'OK');
+      console.log((await addContact(name, email, phone)) === -1 ? 'error: full id pull' : 'OK');
       break;
 
     case 'remove':
